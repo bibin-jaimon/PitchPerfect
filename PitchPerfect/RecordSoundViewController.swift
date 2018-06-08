@@ -42,8 +42,6 @@ class RecordSoundViewController: UIViewController, AVAudioRecorderDelegate{
         audioRecorder.isMeteringEnabled = true
         audioRecorder.prepareToRecord()
         audioRecorder.record()
-        
-        
     }
     
     @IBAction func stopRecording(_ sender: Any) {
@@ -56,7 +54,19 @@ class RecordSoundViewController: UIViewController, AVAudioRecorderDelegate{
     }
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        print("Finished Recording..")
+        if flag {
+            performSegue(withIdentifier: "stopRecording", sender: audioRecorder.url)
+        }else{
+            print("Finished Recording..")
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "stopRecording"{
+            let playSoundsVC = segue.destination as! PlaySoundsViewController
+            let recordedAudioURL = sender as! URL
+            playSoundsVC.recordedAudioURL = recordedAudioURL
+        }
     }
     
 }
